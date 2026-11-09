@@ -142,7 +142,7 @@ const SETTINGS = {
   calendarRefreshMinutes: 10,
 };
 // Extra words staff might type in an event's Location, mapped to a room id
-const ROOM_ALIASES = { "mpr":"mpr", "multi purpose":"mpr", "multipurpose":"mpr", "conference":"conf", "box office":"box",
+const ROOM_ALIASES = { "mpr":"mpr", "multi purpose":"mpr", "multipurpose":"mpr", "conference":"conf", "bid office":"box", "b.i.d":"box",
   "breakout":"break", "break out":"break", "creative hub":"hub", "hub":"hub", "room 1":"r1", "room one":"r1", "room 2":"r2", "room two":"r2",
   "main hall":"main", "small hall":"small", "reception":"recep", "nursery":"nurs", "toilet":"wc", "cafe":"break" };
 
@@ -167,7 +167,7 @@ const ROOMS = [
   { id:"conf",  floor:"U", name:"Conference Room",    icon:"💼", box:[40,20,260,220],   door:[300,200] },
   { id:"r1",    floor:"U", name:"Room 1",             icon:"1️⃣", box:[610,120,90,180],  door:[655,300] },
   { id:"r2",    floor:"U", name:"Room 2",             icon:"2️⃣", box:[520,120,90,180],  door:[565,300] },
-  { id:"box",   floor:"U", name:"Box Office",         icon:"🎟️", box:[700,120,80,180],  door:[740,300] },
+  { id:"box",   floor:"U", name:"BID Office",         icon:"🏢", box:[700,120,80,180],  door:[740,300] },
   { id:"break", floor:"U", name:"Break Out Area",     icon:"☕", box:[40,240,260,230],  door:[250,400] },
   { id:"wc",    floor:"U", name:"Toilets",            icon:"🚻", box:[380,120,140,180], door:[450,300] },
   { id:"skit",  floor:"U", name:"Small Kitchen",      icon:"🫖", box:[300,120,80,180],  door:[340,300], hidden:true },
@@ -189,7 +189,7 @@ const STEPS = {
   conf:  ["Take the lift or stairs beside you to the Upper floor","Turn left out of the Break Out Area","The Conference Room is in front of you"],
   r1:    ["Take the lift or stairs to the Upper floor","Go along the corridor","Room 1 is on your left, after Room 2"],
   r2:    ["Take the lift or stairs to the Upper floor","Go along the corridor past the toilets","Room 2 is on your left"],
-  box:   ["Take the lift or stairs to the Upper floor","Go along the corridor","The Box Office is on your left, after Room 1"],
+  box:   ["Take the lift or stairs to the Upper floor","Go along the corridor","The BID Office is on your left, after Room 1"],
   break: ["Take the lift or stairs beside you to the Upper floor","The Break Out Area is where you arrive"],
   wc:    ["Take the lift or stairs to the Upper floor","Go along the corridor","The toilets are the first doors on your left","There are also toilets on the Lower ground floor"],
   hub:   ["Take the stairs down to the Lower ground floor","The Creative Hub is straight ahead","Toilets are beside the Creative Hub"],
@@ -203,8 +203,8 @@ const SAMPLE_EVENTS = [
   { day:3, start:"19:30", end:"21:30", title:"Film Night", room:"main", kind:"Film" },
   { day:4, start:"14:00", end:"16:00", title:"Indoor Bowls", room:"main" },
   { day:6, start:"09:30", end:"13:00", title:"Saturday Craft & Produce Market", room:"main" },
-  { date:"2026-11-13", start:"19:30", end:"22:00", title:"Highland Folk Night – live music", room:"main", kind:"Show", tag:"Tickets at Box Office" },
-  { date:"2026-11-14", start:"19:00", end:"21:30", title:"Nairn Players: Winter One-Act Plays", room:"main", kind:"Show", tag:"Tickets at Box Office" },
+  { date:"2026-11-13", start:"19:30", end:"22:00", title:"Highland Folk Night – live music", room:"main", kind:"Show", tag:"Tickets at Reception" },
+  { date:"2026-11-14", start:"19:00", end:"21:30", title:"Nairn Players: Winter One-Act Plays", room:"main", kind:"Show", tag:"Tickets at Reception" },
   { date:"2026-11-15", start:"18:00", end:"20:00", title:"Family Film: Sunday Screening", room:"main", kind:"Film" },
   // Small Hall
   { day:1, start:"10:00", end:"11:00", title:"Zumba Gold", room:"small" },
