@@ -10,8 +10,8 @@
     --ink:#1f2a21; --muted:#5f6b61; --bg:#f5f3ee; --card:#fff; --line:#d8d4c8;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{margin:0;height:100%;background:#1a1a1a;font-family:"Segoe UI",Arial,Helvetica,sans-serif;color:var(--ink);overflow:hidden;user-select:none}
-  #stage{position:absolute;left:50%;top:50%;width:1080px;height:1920px;background:var(--bg);display:flex;flex-direction:column;overflow:hidden}
+  html,body{margin:0;width:100%;height:100%;background:#1a1a1a;font-family:"Segoe UI",Arial,Helvetica,sans-serif;color:var(--ink);overflow:hidden;user-select:none}
+  #stage{position:absolute;left:50%;top:50%;-webkit-transform-origin:50% 50%;transform-origin:50% 50%;width:1080px;height:1920px;background:var(--bg);display:flex;flex-direction:column;overflow:hidden}
 
   header{background:#fff;height:250px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 44px 0 30px;border-bottom:14px solid var(--green)}
   .logo{display:flex;align-items:center;gap:22px}
@@ -250,11 +250,41 @@ const isoOf = (d) => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate(
 const dayOffset = (i) => { const t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate() + i); };
 const nowHM = () => { const t = new Date(); return `${pad(t.getHours())}:${pad(t.getMinutes())}`; };
 
+// Scale the 1080x1920 design to whatever space the player actually gives us.
+// URL options for awkward players: ?scale=0.75  or  ?w=720&h=1280  and  ?debug=1 to show measurements.
+const QS = new URLSearchParams(location.search);
+let lastFit = "";
 function fit(){
-  const s = Math.min(window.innerWidth / 1080, window.innerHeight / 1920);
-  $("stage").style.transform = `translate(-50%,-50%) scale(${s})`;
+  const de = document.documentElement, vv = window.visualViewport;
+  const ws = [window.innerWidth, de.clientWidth, vv && vv.width];
+  const hs = [window.innerHeight, de.clientHeight, vv && vv.height];
+  // Some signage players give the page more CSS pixels than the physical screen shows;
+  // if the screen reports portrait, never draw bigger than it.
+  if (screen.width > 0 && screen.height > screen.width) { ws.push(screen.width); hs.push(screen.height); }
+  const W = +QS.get("w") || Math.min(...ws.filter(x => x > 0));
+  const H = +QS.get("h") || Math.min(...hs.filter(x => x > 0));
+  const s = +QS.get("scale") || Math.min(W / 1080, H / 1920);
+  if (!isFinite(s) || s <= 0) return;
+  const key = W + "x" + H + "@" + s;
+  if (key !== lastFit) {
+    lastFit = key;
+    const st = $("stage"), tf = `translate(-50%,-50%) scale(${s})`;
+    st.style.webkitTransform = tf; st.style.transform = tf;
+  }
+  if (QS.get("debug")) {
+    let d = $("fitdebug");
+    if (!d) { d = document.createElement("div"); d.id = "fitdebug";
+      d.style.cssText = "position:fixed;left:0;top:0;z-index:99999;background:#000;color:#0f0;font:16px monospace;padding:6px 10px;white-space:pre";
+      document.body.appendChild(d); }
+    d.textContent = `inner ${innerWidth}x${innerHeight}  client ${de.clientWidth}x${de.clientHeight}\n`
+      + `visual ${vv ? Math.round(vv.width)+"x"+Math.round(vv.height) : "n/a"}  screen ${screen.width}x${screen.height}  dpr ${devicePixelRatio}\n`
+      + `using ${W}x${H}  scale ${s.toFixed(3)}`;
+  }
 }
-window.addEventListener("resize", fit); fit();
+["resize", "load", "orientationchange", "pageshow"].forEach(e => window.addEventListener(e, fit));
+if (window.visualViewport) visualViewport.addEventListener("resize", fit);
+setInterval(fit, 2000);
+fit();
 
 function tick(){
   const d = new Date();
